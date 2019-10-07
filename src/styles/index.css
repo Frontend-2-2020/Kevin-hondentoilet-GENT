@@ -1,0 +1,9 @@
+body {
+  color: slateblue;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+#map {
+  height: 100vh;
+}
