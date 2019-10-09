@@ -10,6 +10,7 @@ const map = L.map('map', {
     zoom: 13
 });
 
+//Create icon / markerImg
 const pawIcon = L.icon({
 	iconUrl: './public/poo.png',
 	iconSize:     [50, 55], // size of the icon
@@ -21,18 +22,38 @@ const pawIcon = L.icon({
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 //Call Gent DB hondentoiletten
+//Set markers and next ask for position user
 axios.get('https://datatank.stad.gent/4/infrastructuur/hondenvoorzieningen.geojson')
   .then(response => {
     const {coordinates} = response.data;
 
     //Call function to set all markers
     setMarkers(coordinates);
+
+    //Ask for location & set marker
+    getPosition();
   });
 
-// Function to set all 
+  // Function to set (all) markers
 const setMarkers = (data) =>{
   data.forEach((el) => {
     L.marker([el[1],el[0]], {icon: pawIcon}).addTo(map);
-    console.log(el);
   });
+};
+
+const getPosition = () =>{
+  navigator.geolocation.getCurrentPosition(success);
+};
+
+const success = (pos) =>{
+  const {latitude, longitude} = pos.coords;
+  L.marker([latitude,longitude], {icon: pawIcon}).addTo(map);
+  centerToLocation(latitude, longitude);
+
+  //const position = [[longitude, latitude]];
+  //setMarkers(position);
+};
+
+const centerToLocation = (lat, long) =>{
+  map.panTo(new L.LatLng(lat, long));
 };
