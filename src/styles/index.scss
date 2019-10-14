@@ -5,7 +5,15 @@ body {
   font-family: sans-serif;
   margin: 0; 
 }
-
+#data,
 #map{
   height: 100vh;
+  float: left;
 }
+#data{
+  width: 40%;
+}
+
+#map{
+  width: 60%;
+};

@@ -1,7 +1,11 @@
 import axios from 'Axios';
+import geodist from 'geodist';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '../styles/index.scss';
+
+var userPos = {};
+let distances = [];
 
 const map = L.map('map', {
     //Where the map is centered (location)
@@ -26,12 +30,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 axios.get('https://datatank.stad.gent/4/infrastructuur/hondenvoorzieningen.geojson')
   .then(response => {
     const {coordinates} = response.data;
-
     //Call function to set all markers
     setMarkers(coordinates);
 
     //Ask for location & set marker
-    getPosition();
+    navigator.geolocation.getCurrentPosition(success);
+    calculateDistance(coordinates);
+
   });
 
   // Function to set (all) markers
@@ -41,19 +46,30 @@ const setMarkers = (data) =>{
   });
 };
 
-const getPosition = () =>{
-  navigator.geolocation.getCurrentPosition(success);
-};
-
 const success = (pos) =>{
   const {latitude, longitude} = pos.coords;
   L.marker([latitude,longitude], {icon: pawIcon}).addTo(map);
   centerToLocation(latitude, longitude);
-
-  //const position = [[longitude, latitude]];
-  //setMarkers(position);
+  userPos.latitude = latitude;
+  userPos.longitude = longitude;
 };
 
 const centerToLocation = (lat, long) =>{
   map.panTo(new L.LatLng(lat, long));
+};
+
+const calculateDistance = (dataDb) =>{
+  console.log(userPos);
+
+  dataDb.forEach((el) => {
+    // const toilet = {
+    //   'latitude': el[1],
+    //   'longitude': el[0]
+    // };
+    // const dist = geodist(userPos, toilet);
+    //const toiletData = {};
+
+    //Add to new array
+    console.log(el[0],el[1]);
+  });
 };
