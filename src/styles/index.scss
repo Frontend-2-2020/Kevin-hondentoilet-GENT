@@ -3,17 +3,11 @@ $body-color: slateblue;
 body {
   color: $body-color;
   font-family: sans-serif;
-  margin: 0; 
-}
-#data,
-#map{
-  height: 100vh;
-  float: left;
 }
 #data{
-  width: 40%;
+  flex: 1;
 }
-
-#map{
-  width: 60%;
-};
+#myMap{
+  min-height: 100vh;
+  flex: 1.6;
+}
